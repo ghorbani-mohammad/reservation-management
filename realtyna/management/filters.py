@@ -11,3 +11,14 @@ class RoomFilter(filters.FilterSet):
     class Meta:
         model = models.Room
         fields = ('owner',)
+
+
+class ReservationFilter(filters.FilterSet):
+    owner = filters.CharFilter(
+        field_name="room__owner__username",
+        lookup_expr='iexact',
+    )
+
+    class Meta:
+        model = models.Reservation
+        fields = ('owner',)

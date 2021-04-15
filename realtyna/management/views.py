@@ -64,6 +64,8 @@ class ReserveViewSet(
         'retrieve': serializers.ReservationListDetailSerializer,
     }
     pagination_class = ReservationPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.ReservationFilter
 
     def get_serializer_class(self):
         return self.serializers.get(self.action)
