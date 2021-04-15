@@ -1,5 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.mixins import (
     CreateModelMixin,
@@ -37,6 +38,32 @@ class RoomViewSet(
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.RoomFilter
     pagination_class = RoomPagination
+
+    def get_serializer_class(self):
+        return self.serializers.get(self.action)
+
+
+class ReservationPagination(PageNumberPagination):
+    page_size = 10
+
+
+class ReserveViewSet(
+    CreateModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+    DestroyModelMixin,
+    GenericViewSet,
+):
+    queryset = models.Reservation.objects.order_by('-id')
+    serializers = {
+        'create': serializers.ReservationSerializer,
+        #     'list': serializers.RoomListDetailSerializer,
+        #     'retrieve': serializers.RoomListDetailSerializer,
+        #     'update': serializers.RoomCreateUpdateDestroySerializer,
+        #     'destroy': serializers.RoomCreateUpdateDestroySerializer,
+    }
+    pagination_class = ReservationPagination
 
     def get_serializer_class(self):
         return self.serializers.get(self.action)
