@@ -20,32 +20,9 @@ services:
     ports:
       - 9052:80
     command: ["python", "/app/realtyna/manage.py", "runserver", "0:80"]
+    command: ["sleep", "300"]
     environment:
       DEBUG: 'True'
-
-  realtyna_celery:
-    container_name: realtyna_celery
-    build: .
-    working_dir: /app/realtyna
-    command: ["celery", "-A", "realtyna", "worker", "-l", "info"]
-    restart: unless-stopped
-    volumes:
-      - .:/app
-    depends_on:
-      - realtyna_db
-      - realtyna_redis
-
-  realtyna_beat:
-    container_name: realtyna_beat
-    build: .
-    working_dir: /app/realtyna
-    command: ["celery", "-A", "realtyna", "beat", "-l", "info"]
-    restart: unless-stopped
-    volumes:
-      - .:/app
-    depends_on:
-      - realtyna_db
-      - realtyna_redis
 
   realtyna_redis:
     container_name : realtyna_redis
