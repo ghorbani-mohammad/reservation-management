@@ -4,8 +4,10 @@ services:
 
   realtyna_db:
     container_name: realtyna_db
-    image: mdillon/postgis:11
+    image: postgres:13
     restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: test
     volumes:
       - realtyna_db:/var/lib/postgresql/data
 
@@ -15,6 +17,8 @@ services:
     restart: unless-stopped
     depends_on:
       - realtyna_db
+    env_file:
+      - .env
     volumes:
       - .:/app
     ports:
@@ -22,11 +26,6 @@ services:
     command: ["python", "/app/realtyna/manage.py", "runserver", "0:80"]
     environment:
       DEBUG: 'True'
-
-  realtyna_redis:
-    container_name : realtyna_redis
-    image: redis:5.0.8
-    restart: unless-stopped
 
 volumes:
   realtyna_db:

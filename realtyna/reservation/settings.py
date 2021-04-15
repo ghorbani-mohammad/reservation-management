@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from envparse import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,11 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qqq%(l1le2(qm(@=3myk&r(ahbw&nst_=pd3q1u6t%zvl2vpw3'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = env.str('SECRET_KEY', default='qqq%(l1le2(qm(@=3myk&r(ahbw&nst_=pd3q1u6t%zvl2vpw3')
+DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = []
 
@@ -73,10 +71,15 @@ WSGI_APPLICATION = 'reservation.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+DB_CONNECTION_STRING = env('DATABASE_CONNECTION_STRING', default='postgres;postgres;test;realtyna_db;5432').split(';')
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DB_CONNECTION_STRING[0],
+        'USER': DB_CONNECTION_STRING[1],
+        'PASSWORD': DB_CONNECTION_STRING[2],
+        'HOST': DB_CONNECTION_STRING[3],
+        'PORT': DB_CONNECTION_STRING[4],
     }
 }
 
