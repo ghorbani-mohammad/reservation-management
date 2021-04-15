@@ -12,10 +12,16 @@ class BaseModel(models.Model):
 class User(BaseModel):
     username = models.CharField(max_length=100, unique=True)
 
+    def __str__(self) -> str:
+        return self.username
+
 
 class Room(BaseModel):
     bed = models.IntegerField(default=1)
     owner = models.ForeignKey(User, related_name='rooms', on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'{self.pk}. {self.owner}'
 
 
 class Reservation(BaseModel):
