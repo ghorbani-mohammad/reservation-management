@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+
+  realtyna_db:
+    container_name: realtyna_db
+    image: mdillon/postgis:11
+    restart: unless-stopped
+    volumes:
+      - realtyna_db:/var/lib/postgresql/data
+
+  realtyna_api:
+    container_name: realtyna_api
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - realtyna_db
+    volumes:
+      - .:/app
+    ports:
+      - 9052:80
+    command: ["python", "/app/realtyna/manage.py", "runserver", "0:80"]
+    environment:
+      DEBUG: 'True'
+
+  realtyna_celery:
+    container_name: realtyna_celery
+    build: .
+    working_dir: /app/realtyna
+    command: ["celery", "-A", "realtyna", "worker", "-l", "info"]
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    depends_on:
+      - realtyna_db
+      - realtyna_redis
+
+  realtyna_beat:
+    container_name: realtyna_beat
+    build: .
+    working_dir: /app/realtyna
+    command: ["celery", "-A", "realtyna", "beat", "-l", "info"]
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    depends_on:
+      - realtyna_db
+      - realtyna_redis
+
+  realtyna_redis:
+    container_name : realtyna_redis
+    image: redis:5.0.8
+    restart: unless-stopped
+
+volumes:
+  realtyna_db:

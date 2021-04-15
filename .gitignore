@@ -1,0 +1,16 @@
+### Django ###
+*.log
+*.pot
+*.pyc
+.vscode
+__pycache__/
+local_settings.py
+.idea
+venv
+db.sqlite3
+realtyna/static
+*.sql
+*.sql.gz
+todo
+realtyna/celerybeat-schedule
+realtyna/celerybeat.pid
