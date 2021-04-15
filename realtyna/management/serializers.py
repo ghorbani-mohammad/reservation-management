@@ -39,21 +39,24 @@ class RoomListDetailSerializer(ModelSerializer):
             'id',
             'bed',
             'owner',
+            'in_reserve',
         )
 
 
 class ReservationSerializer(ModelSerializer):
     def validate(self, data):
-        print(data['room'].in_reserve)
+        if not 'end_date' in data:
+            data['end_date'] = data['start_date'] + timedelta(days=data['duration'])
         if data['room'].in_reserve:
             raise ValidationError({"room": "room is reserved"})
+        if not data['room'].available(data['start_date'], data['end_date']):
+            raise ValidationError({"room": "room is not available"})
         if data['start_date'] < timezone.localtime():
             raise ValidationError({"start_date": "start must occur after now"})
         return data
 
     def create(self, validated_data):
         obj = models.Reservation(**validated_data)
-        obj.end_date = obj.start_date + timedelta(days=obj.duration)
         obj.save()
         return obj
 

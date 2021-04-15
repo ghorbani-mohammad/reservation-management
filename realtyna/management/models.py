@@ -30,6 +30,15 @@ class Room(BaseModel):
             end_date__gte=timezone.localtime(), start_date__lte=timezone.localtime()
         ).exists()
 
+    def available(self, start_date, end_date):
+        print(self.reserves.filter(end_date__range=[start_date, end_date]).exists())
+        print(self.reserves.filter(start_date__range=[start_date, end_date]).exists())
+        reserved = (
+            self.reserves.filter(end_date__range=[start_date, end_date]).exists()
+            or self.reserves.filter(start_date__range=[start_date, end_date]).exists()
+        )
+        return not reserved
+
 
 class Reservation(BaseModel):
     name = models.CharField(max_length=50, null=True)
