@@ -1,5 +1,8 @@
-from rest_framework.serializers import ModelSerializer
 from datetime import timedelta
+
+from django.utils import timezone
+from rest_framework.serializers import ModelSerializer, ValidationError
+
 from . import models
 
 
@@ -40,6 +43,14 @@ class RoomListDetailSerializer(ModelSerializer):
 
 
 class ReservationSerializer(ModelSerializer):
+    def validate(self, data):
+        print(data['room'].in_reserve)
+        if data['room'].in_reserve:
+            raise ValidationError({"room": "room is reserved"})
+        if data['start_date'] < timezone.localtime():
+            raise ValidationError({"start_date": "start must occur after now"})
+        return data
+
     def create(self, validated_data):
         obj = models.Reservation(**validated_data)
         obj.end_date = obj.start_date + timedelta(days=obj.duration)

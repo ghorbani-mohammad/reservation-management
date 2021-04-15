@@ -1,5 +1,6 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
+from django.utils import timezone
 
 
 class BaseModel(models.Model):
@@ -22,6 +23,12 @@ class Room(BaseModel):
 
     def __str__(self) -> str:
         return f'{self.pk}. {self.owner}'
+
+    @property
+    def in_reserve(self):
+        return self.reserves.filter(
+            end_date__gte=timezone.localtime(), start_date__lte=timezone.localtime()
+        ).exists()
 
 
 class Reservation(BaseModel):

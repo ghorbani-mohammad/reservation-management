@@ -14,12 +14,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(models.Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = (
-        'pk',
-        'bed',
-        'owner',
-        'created_at',
-    )
+    list_display = ('pk', 'bed', 'owner', 'created_at', 'in_reserve')
 
 
 @admin.register(models.Reservation)
