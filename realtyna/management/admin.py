@@ -21,10 +21,10 @@ class RoomAdmin(admin.ModelAdmin):
 class ReservationAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
+        'name',
         'room',
         'reserver',
         'start_date',
         'duration',
         'end_date',
-        'created_at',
     )

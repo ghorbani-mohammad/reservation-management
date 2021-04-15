@@ -32,6 +32,7 @@ class Room(BaseModel):
 
 
 class Reservation(BaseModel):
+    name = models.CharField(max_length=50, null=True)
     room = models.ForeignKey(Room, related_name='reserves', on_delete=models.CASCADE)
     reserver = models.ForeignKey(
         User, related_name='reservations', on_delete=models.CASCADE
