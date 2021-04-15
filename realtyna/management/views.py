@@ -59,10 +59,9 @@ class ReserveViewSet(
     queryset = models.Reservation.objects.order_by('-id')
     serializers = {
         'create': serializers.ReservationSerializer,
-        #     'list': serializers.RoomListDetailSerializer,
-        #     'retrieve': serializers.RoomListDetailSerializer,
-        #     'update': serializers.RoomCreateUpdateDestroySerializer,
-        #     'destroy': serializers.RoomCreateUpdateDestroySerializer,
+        'update': serializers.ReservationSerializer,
+        'list': serializers.ReservationListDetailSerializer,
+        'retrieve': serializers.ReservationListDetailSerializer,
     }
     pagination_class = ReservationPagination
 
