@@ -1,3 +1,4 @@
+from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from . import views
@@ -5,6 +6,8 @@ from . import views
 router = SimpleRouter()
 router.register('room', views.RoomViewSet, basename='room')
 router.register('reservation', views.ReserveViewSet, basename='reservation')
-urlpatterns = []
+urlpatterns = [
+    path('check_availability/', views.CheckAvailabilityAPIView.as_view()),
+]
 
 urlpatterns += router.urls

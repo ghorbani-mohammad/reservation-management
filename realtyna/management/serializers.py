@@ -78,3 +78,13 @@ class ReservationSerializer(ModelSerializer):
             'end_date',
         )
         extra_kwargs = {'end_date': {'required': False}, 'name': {'required': True}}
+
+
+class CheckAvailabilitySerializer(ModelSerializer):
+    class Meta:
+        model = models.Reservation
+        fields = (
+            'room',
+            'start_date',
+            'end_date',
+        )

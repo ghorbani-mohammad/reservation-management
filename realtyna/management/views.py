@@ -1,7 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.views import APIView
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
 from rest_framework.mixins import (
     CreateModelMixin,
     UpdateModelMixin,
@@ -67,3 +68,16 @@ class ReserveViewSet(
 
     def get_serializer_class(self):
         return self.serializers.get(self.action)
+
+
+class CheckAvailabilityAPIView(APIView):
+    serializer_class = serializers.CheckAvailabilitySerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        return Response(
+            {'available': data['room'].available(data['start_date'], data['end_date'])}
+        )
