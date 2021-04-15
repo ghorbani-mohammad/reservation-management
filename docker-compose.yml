@@ -20,7 +20,6 @@ services:
     ports:
       - 9052:80
     command: ["python", "/app/realtyna/manage.py", "runserver", "0:80"]
-    command: ["sleep", "300"]
     environment:
       DEBUG: 'True'
 
