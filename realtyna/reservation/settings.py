@@ -20,7 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-SECRET_KEY = env.str('SECRET_KEY', default='qqq%(l1le2(qm(@=3myk&r(ahbw&nst_=pd3q1u6t%zvl2vpw3')
+SECRET_KEY = env.str(
+    'SECRET_KEY', default='qqq%(l1le2(qm(@=3myk&r(ahbw&nst_=pd3q1u6t%zvl2vpw3'
+)
 DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = []
@@ -35,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'management',
 ]
 
 MIDDLEWARE = [
@@ -71,7 +74,9 @@ WSGI_APPLICATION = 'reservation.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DB_CONNECTION_STRING = env('DATABASE_CONNECTION_STRING', default='postgres;postgres;test;realtyna_db;5432').split(';')
+DB_CONNECTION_STRING = env(
+    'DATABASE_CONNECTION_STRING', default='postgres;postgres;test;realtyna_db;5432'
+).split(';')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
