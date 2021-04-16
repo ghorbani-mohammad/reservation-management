@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.utils import timezone
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError, IntegerField
 
 from . import models
 
@@ -100,4 +100,16 @@ class CheckAvailabilitySerializer(ModelSerializer):
             'room',
             'start_date',
             'end_date',
+        )
+
+
+class CheckNumberRoomAvailabilitySerializer(ModelSerializer):
+    number = IntegerField(required=True)
+
+    class Meta:
+        model = models.Reservation
+        fields = (
+            'start_date',
+            'end_date',
+            'number',
         )

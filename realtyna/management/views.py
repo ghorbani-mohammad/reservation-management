@@ -82,3 +82,30 @@ class CheckAvailabilityAPIView(APIView):
         return Response(
             {'available': data['room'].available(data['start_date'], data['end_date'])}
         )
+
+
+class CheckNumberAvailabilityAPIView(APIView):
+    serializer_class = serializers.CheckNumberRoomAvailabilitySerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        rooms = models.Room.objects.all()
+        room_counter = 0
+        bed_counter = 0
+        for room in rooms:
+            if room.available(data['start_date'], data['end_date']):
+                room_counter += 1
+                bed_counter += room.bed
+
+        return Response(
+            {
+                'available_requested_rooms': True
+                if room_counter >= data['number']
+                else False,
+                'available_rooms_count': room_counter,
+                'available_beds_count': bed_counter,
+            }
+        )
