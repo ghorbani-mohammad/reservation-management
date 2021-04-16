@@ -1,22 +1,9 @@
 #!/bin/bash
 
 PROJECT_NAME='realtyna'
-SERVER_NAME='keylid1'
-SERVER_PATH='/var/www/igap_inf/'
 
 API_CONTAINER_NAME=${PROJECT_NAME}'_api'
 DB_CONTAINER_NAME=${PROJECT_NAME}'_db'
-CELERY_CONTAINER_NAME=${PROJECT_NAME}'_celery'
-CELERY_BEAT_CONTAINER_NAME=${PROJECT_NAME}'_beat'
-REDIS_CONTAINER_NAME=${PROJECT_NAME}'_redis'
-
-COMPOSE_FILE='docker-compose-pro.yml'
-NGINX_FILE='realtyna_api_nginx.conf'
-
-
-function log() {
-    docker-compose -f ${COMPOSE_FILE} logs -f
-}
 
 function make_migrations() {
     docker exec -it ${API_CONTAINER_NAME} ./${PROJECT_NAME}/manage.py makemigrations
@@ -58,12 +45,6 @@ function create_admin_user() {
     docker exec -it ${API_CONTAINER_NAME} ./${PROJECT_NAME}/manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('${1:-admin}', '', '${2:-test1234}')"
 }
 
-function issue_https_certificate() {
-    sudo certbot --nginx certonly -d beshkaf.tika-team.ir
-    sudo ln -s ${SERVER_PATH}${NGINX_FILE} /etc/nginx/sites-enabled/${NGINX_FILE}
-    sudo service nginx restart
-}
-
 function dump_db() {
     echo -e "\n ... dump db ... \n"
     mkdir -p db_backup
@@ -83,11 +64,6 @@ function up() {
 function remove_unused_image() {
     echo -e "\n ... remove unused images ... \n"
     docker image prune -af
-}
-
-function scp_conf() {
-    echo -e "\n ... copy conf files to server ... \n"
-    scp ${COMPOSE_FILE} ${NGINX_FILE} mng-api.sh doc.json .docpasswd ${SERVER_NAME}:${SERVER_PATH}
 }
 
 case $1 in
