@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import GenericViewSet
@@ -66,6 +67,17 @@ class ReserveViewSet(
     pagination_class = ReservationPagination
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.ReservationFilter
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        res = ''
+        print(response.data['results'])
+        for item in response.data['results']:
+            res += f'<div style="margin-top:1px;border:solid;padding:1px;">Reservation Name: \
+                {item["name"]} <br>Room Id: {item["room"]["id"]} <br>Room Owner: {item["room"]["owner"]["username"]} \
+                <br>Start Date: {item["start_date"]} <br>End Date: {item["end_date"]}</div>'
+        html = f'<html><body>{res}</body></html>'
+        return HttpResponse(html)
 
     def get_serializer_class(self):
         return self.serializers.get(self.action)

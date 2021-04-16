@@ -78,6 +78,8 @@ class ReservationListDetailSerializer(ModelSerializer):
         data = super().to_representation(instance)
         data['room'] = RoomListDetailSerializer(instance.room).data
         data['reserver'] = UserSerializer(instance.reserver).data
+        data['start_date'] = instance.start_date.strftime("%Y-%m-%d %H:%M:%S")
+        data['end_date'] = instance.end_date.strftime("%Y-%m-%d %H:%M:%S")
         return data
 
     class Meta:

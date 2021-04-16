@@ -31,8 +31,6 @@ class Room(BaseModel):
         ).exists()
 
     def available(self, start_date, end_date):
-        print(self.reserves.filter(end_date__range=[start_date, end_date]).exists())
-        print(self.reserves.filter(start_date__range=[start_date, end_date]).exists())
         reserved = (
             self.reserves.filter(end_date__range=[start_date, end_date]).exists()
             or self.reserves.filter(start_date__range=[start_date, end_date]).exists()
