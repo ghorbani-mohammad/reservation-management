@@ -1,6 +1,4 @@
-[![N|Solid](https://realtyna.com/wp-content/uploads/2019/05/logo.png)](https://realtyna.com/)
-
-## This is a interview task with [Realtyna](https://realtyna.com/) Company
+## This is a my interview task
 
 
 This task is about reservation system. Users can create their rooms and and also reserve rooms. As mentioned in the document nor Authentication or Authorization considered. So a user can update or delete room of other users.
